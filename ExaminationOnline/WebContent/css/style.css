@@ -1,0 +1,67 @@
+.forget_password
+{
+	z-index: 30;
+	width: 500px;
+	margin-left: 680px;
+	margin-top: 50px;
+	height: 320px;
+	background: #1D1E1E;
+	color:#fff;
+	top: 50%;
+	border-radius: 5px;
+	position: fixed;
+	transform: translate(-50%,-50%);
+	box-sizing: border-box;
+	padding: 70px 30px;
+
+}
+.avatar{
+	width: 100px;
+	height: 100px;
+	border-radius: 50%;
+	position: fixed;
+	top: -50px;
+
+	left: calc(50% - 50px);
+
+}
+.forget_password h1{
+	margin: 0;
+	padding:0 0 20px;
+	text-align: center;
+	font-size: 22px;
+}
+.forget_password p
+{
+	font-size: 15px;
+}
+.forget_password input
+{
+	margin-bottom: 10px;
+}
+.forget_password input[type="text"],input[type="password"]
+{
+	border: none;
+	border-bottom: 2px solid #fff;
+	background: transparent;
+	outline: none;
+	height: 40px;
+	color: #fff;
+	font-size: 16px;
+}
+.forget_password button
+{
+	border: none;
+	outline: none;
+	height: 40px;
+	background: #FFB900;
+	color: #fff;
+	font-size: 18px;
+	border-radius: 20px;
+}	
+.forget_password button:hover
+{
+	cursor: pointer;
+	background: #FFB900;
+	color: #000;
+}

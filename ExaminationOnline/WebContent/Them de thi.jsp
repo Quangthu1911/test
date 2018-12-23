@@ -102,12 +102,12 @@
 					</div>
 					<div class="dropdown">
 						<img src="images/ab.png" width="50px;" height="50px;">
-						<button class="dropbtn">Trần Thị Nga</button>
+						<button class="dropbtn">${UserLogin}</button>
 						<span class="fa fa-sort-desc" style="color: #fff;"></span>
 						<div class="dropdown-content">
-							<a href="ThongTinCN.jsp"><span class="fa fa-sun-o"></span> Chỉnh sửa thông tin</a>
 							<a href="anounce.jsp"><span class="fa fa-comment-o"></span> Xem thông báo</a>
-							<a href="#"><span class="fa fa-sign-out"></span> Đăng xuất</a>
+							<a href="LogOutForward"><span class="fa fa-sign-out"></span> Đăng xuất</a>
+							<a href="index.jsp"><span class="fa  fa-arrow-left"></span>Trở về trang chủ</a>
 						 </div>
 					</div>
 				</div>
@@ -497,7 +497,7 @@
 				 			<li><a href="Teacher.jsp">THÔNG TIN</a></li>
 				 			<li><a href="#">CHỈNH SỬA</a></li>
 				 			<li><a href="Student.jsp">QUẢN LÝ BÀI THI</a></li>
-				 			<li><a href="announce.jsp">THÔNG BÁO</a></li>
+				 			<li><a href="NewsTeacher.jsp">THÔNG BÁO</a></li>
 				 	</ul>
 				</div>
 			</div>

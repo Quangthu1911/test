@@ -1,5 +1,8 @@
 <%@ page language="java" contentType="text/html; charset=utf-8"
     pageEncoding="utf-8"%>
+    <%@ taglib uri="http://java.sun.com/jsp/jstl/core" prefix="c" %> 
+        <%@page import="BEAN.announce"%>
+        <%@page import="DAO.AnnounceDAO"%>
 <!DOCTYPE html>
 <html>
 
@@ -17,7 +20,7 @@
     <link rel="stylesheet" type="text/css" media="screen" href="main.css" />
     <script type="text/javascript" src="js/jquery-2.1.4.min.js"></script>
     <script type="text/javascript" src="js/bootstrap.js"></script>
-
+    
 </head>
 
 <body>
@@ -49,12 +52,12 @@
                     </div>
                     <div class="dropdown">
                         <img src="images/ab.png" width="50px;" height="50px;">
-                        <button class="dropbtn">ADMIN</button>
+                        <button class="dropbtn">${UserLogin}</button>
                         <span class="fa fa-sort-desc" style="color: #fff;"></span>
                         <div class="dropdown-content">
-                            <a href="Admin.jsp"><span class="fa fa-sun-o"></span> Chỉnh sửa thông tin</a>
                             <a href="QLThongBao.jsp"><span class="fa fa-comment-o"></span> Xem thông báo</a>
-                            <a href="#"><span class="fa fa-sign-out"></span> Đăng xuất</a>
+                            <a href="LogOutForward"><span class="fa fa-sign-out"></span> Đăng xuất</a>
+                            <a href="index.jsp"><span class="fa  fa-arrow-left"></span>Trở về trang chủ</a>
                         </div>
                     </div>
                 </div>
@@ -72,20 +75,19 @@
             <div class="col-md-3 menu_info_left">
                 <div id="menu">
                     <ul>
-                        <li><a href="XemThongTinCaNhan.jsp">THÔNG TIN</a></li>
+                        <li><a href="Admin.jsp">THÔNG TIN</a></li>
                         <li><a href="Quanlytaikhoan.jsp">QUẢN LÝ TÀI KHOẢN</a></li>
-                        <li><a href="#">QUẢN LÝ BÀI THI</a></li>
+                        <li><a href="QuanLyBaiThiAdmin.jsp">QUẢN LÝ BÀI THI</a></li>
                         <li><a href="QLThongBao.jsp">THÔNG BÁO</a></li>
-                        <li><a href="CapQuyen.jsp">PHÂN QUYỀN</a></li>
                     </ul>
                 </div>
             </div>
-            <div class="col-md-9 job_info_right" id="KhungChinhSua">
+            <div class="col-md-9 job_info_right" style="overflow: auto;" id="KhungChinhSua">
                 <div>
                     <div>
                         <br>
                         <input class="form-control" id="timkiem" type="text" placeholder="Search.." style="width:50%">
-                        <a href="ThemThongBao.jsp"> <button style="float:right" type="button" class="btn btn-primary">Thêm
+                        <a href="EditAnounceFoward?temp=<%="add"%>"> <button style="float:right" type="button" class="btn btn-primary">Thêm
                                 Thông Báo</button></a><br> <br>
                         <div class="panel panel-primary">
                             <div class="panel-heading" style="text-align:center">DANH SÁCH THÔNG BÁO</div>
@@ -93,65 +95,28 @@
                                 <table class="table" id="TableTB">
                                     <thead>
                                         <tr>
-                                            <th>STT</th>
-                                            <th>Tên Thông Báo</th>
-
-                                            <th>Thời Gian Đăng</th>
-                                            <th>Nội Dung</th>
-                                            <th>Xóa</th>
+                                            <th>ID</th>
+                                            <th>Tiêu đề</th>
+                                            <th>Tiêu đề phụ</th>
+                                            <th>Nội dung thông báo</th>
+                                            <th></th>
                                         </tr>
                                     </thead>
                                     <tbody>
+                                    <% for(announce c:AnnounceDAO.DisplayAnnounce())
+                                    {%>
                                         <tr>
-                                            <td>1</td>
-                                            <td>Kiểm Tra Giữa Kì</td>
+                                            <td><%= c.getIdNews()%></td>
+                                            <td><%=c.getTitleMainNews() %></td>
 
-                                            <td>19-12-2018</td>
-                                            <td>Về việc kiểm kia 1 tiết cho khối lớp 10</td>
+                                            <td><%=c.getTitleNews() %></td>
+                                            <td><%=c.getContentNews() %></td>
 
-                                            <td><button onclick="deleteRow(this)" id="TableTB"><span class="glyphicon glyphicon-trash"></span></button>
+                                            <td><a href="EditAnounceFoward?idNews=<%=c.getIdNews()%>&temp=<%="delete"%>"><span class="glyphicon glyphicon-trash" title="Xóa thông báo"></span></a>
+                                            <td><a href="EditAnounceFoward?idNews=<%=c.getIdNews()%>&titleMainNews=<%=c.getTitleMainNews() %>&titleNews=<%=c.getTitleNews() %>&contentNews=<%=c.getContentNews() %>&temp=<%="edit"%>"><img src="https://img.icons8.com/ios/50/000000/pencil.png" title="Chỉnh sửa thông báo" style="width:20px;height:20px;margin-top:-5px;" ></a>
                                             </td>
                                         </tr>
-                                        <tr>
-                                            <td>2</td>
-                                            <td>Kiểm tra mạng máy tính</td>
-
-                                            <td>18-12-2018</td>
-                                            <td>Kiểm tra mạng máy tính</td>
-
-                                            <td><button onclick="deleteRow(this)" id="TableTB"><span class="glyphicon glyphicon-trash"></span></button>
-                                            </td>
-                                        </tr>
-                                        <tr>
-                                            <td>3</td>
-                                            <td>Bảo trì nâng cấp</td>
-
-                                            <td>19-11-2018</td>
-                                            <td>V/v Bảo trì và nâng cấp</td>
-
-                                            <td><button onclick="deleteRow(this)" id="TableTB"><span class="glyphicon glyphicon-trash"></span></button>
-                                            </td>
-                                        </tr>
-                                        <tr>
-                                            <td>4</td>
-                                            <td>Kiểm tra kiến thức lập trình</td>
-
-                                            <td>19-8-2018</td>
-                                            <td>Kiểm tra kiến thức..</td>
-
-                                            <td><button onclick="deleteRow(this)" id="TableTB"><span class="glyphicon glyphicon-trash"></span></button>
-                                            </td>
-                                        </tr>
-                                        <tr>
-                                            <td>5</td>
-                                            <td>Đề thi thử lần 3</td>
-
-                                            <td>19-12-2018</td>
-                                            <td> Đề thi..</td>
-
-                                            <td><button onclick="deleteRow(this)" id="TableTB"><span class="glyphicon glyphicon-trash"></span></button>
-                                            </td>
-                                        </tr>
+                                      <%} %>
                                     </tbody>
                                 </table>
 
@@ -159,15 +124,6 @@
 
                             </div>
                             <div class="panel-footer"></div>
-                            <ul class="pagination" style="margin-left:300px">
-                                <li><a href="#">1</a></li>
-                                <li><a href="#">2</a></li>
-                                <li><a href="#">3</a></li>
-                                <li><a href="#">4</a></li>
-                                <li><a href="#">5</a></li>
-                            </ul>
-
-
                         </div>
                     </div>
                 </div>

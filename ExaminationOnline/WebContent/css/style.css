@@ -51,7 +51,7 @@ label {
 }
 .navbar {
 	position: relative;
-	min-height: 70px;
+	min-height: 50px;
 }
 
 .navbar-default {
@@ -809,7 +809,7 @@ ul.social-icons3.two li a {
 	border: #FBB900 solid 2px;
 	text-align: center;
 	z-index: 30;
-	margin-left: 100px;
+	margin-left: 750px;
 	position: fixed;
 }
 .btn_yesno
@@ -841,18 +841,18 @@ ul.social-icons3.two li a {
 	padding-top: 50px;
 	padding-left: 10px;
 }
-#Question2 p
+#Question1 p
 {
 	color: #fff;
-	font-size: 20px;
+	font-size: 25px;
 	padding-top: 50px;
-	padding-left: 10px;	
+	padding-left: 20px;	
 }
 .result span
 {
 
 	color: #fff;
-	line-height: 40px;
+	line-height: 10px;
 	font-size: 15px;
 }
 .result
@@ -869,12 +869,15 @@ ul.social-icons3.two li a {
 {
 	background: #1E1D1D;
 	width: 600px;
-	/*height: 230px;*/
 	margin-left: 370px;
 	margin-bottom: 60px;
 	margin-top: 60px;
 	border: #fff solid 2px;
 	border-radius: 30px;
+}
+#form_finish
+{
+	display:none;
 }
 .finish p
 {
@@ -895,16 +898,6 @@ ul.social-icons3.two li a {
 .finish input[type="submit"]:hover
 {
 	background: #23B684;
-}
-.btn_exam input[type="submit"]
-{
-	background: #FFB900;
-	color: #fff;
-	font-size: 20px;
-}
-#form_finish
-{
-	display: none;
 }
 .btn_exam input[type="submit"]:hover
 {
@@ -1208,7 +1201,6 @@ span.meta {
 	width: auto; 
 	border-radius: 20px;
 	float: right;
-	display: none;
 }
 #cmt_tea2
 {
@@ -1497,11 +1489,11 @@ label{
    transition-duration: 0.4s;
   border-radius: 10px;
   height: 50px;
-  background-color: #5a2424;
+  background-color: #e4cd62;
 }
 
 .buttonIndex:hover {
-    background-color: #1e0c42;
+    background-color: #7ecdd4;
     color: white;
 
 }
@@ -1535,8 +1527,8 @@ label{
 	margin-left: 680px;
 	margin-top:-5px;
 	height: 600px;
-	background:#a96858;
-	color:black;
+	background:black;
+	color:white;
 	top: 50%;
 	border-radius: 10px;
 	position: fixed;
@@ -1585,13 +1577,13 @@ label{
 }
 .local{
 	border-color: white;
-	border-style: solid;
+	border-style: none;  /*  co chinh sua*/
 	color: white;
 }
 .local1{
 	border-color: white;
 	border-style: solid;
-	color: #163e30;
+	color: white;
 }
 .addExam-title{
 	border-color: white;
@@ -1650,7 +1642,7 @@ label{
 }
 #btnCancel{
 	color: black;
-	margin-left: 70px;
+	margin-left: 130px;
 	border-radius:5px;
 	border-width: 0.5px;
 
@@ -1658,7 +1650,7 @@ label{
 #btnNext{
 	color: black;
 	border-radius:5px;
-	margin-left: 105px;
+	margin-left: 70px;
 }
 #btnCancel:hover{
 	background-color: #e7e7a5;
@@ -1676,10 +1668,11 @@ label{
 
 /*Add Student*/
 .in4AddStudent{
-	 border-color: white;border-radius: 5px;border-style: solid;
+	 border-color: white;border-radius: 5px;border-style: none;
 	 float: left;
-	 width: 80px;
+	 width: 170px;
 	 text-align: center;
+	 background:transparent;
 }
 .in4AddStudent1{
 	border-color: white;border-radius: 5px;border-style: solid;
@@ -1704,8 +1697,9 @@ textarea:invalid {
   border: 2px solid red;
 }
 
-textarea:valid {
+textarea:valid {/*sửa o f  */
   border: 2px solid black;
+  color:white;
 }
 #require:invalid{
 	border: 2px solid red;
@@ -1721,3 +1715,19 @@ textarea:valid {
 	border:solid 0.5px white;
 	text-align: center;
 }
+.reviewExam
+		{
+			width: 700px;
+			height: 500px;
+			background: #fff;
+			margin-top: 40px;
+			margin-bottom: 40px;
+			border: #1D1E1E solid 2px;
+			border-radius: 5px;
+			margin-left: 25%;
+			overflow: auto;
+		}
+		.reviewExam p
+		{
+			font-size: 20px;
+		}

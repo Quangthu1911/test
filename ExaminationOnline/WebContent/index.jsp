@@ -1,5 +1,11 @@
+<%@page import="controller.BXHForward"%>
 <%@ page language="java" contentType="text/html; charset=utf-8"
     pageEncoding="utf-8"%>
+<%@ taglib uri="http://java.sun.com/jsp/jstl/core" prefix="c" %> 
+        <%@page import="BEAN.Exam"%>
+        <%@page import="BEAN.BXH"%>
+<%@page import="DAO.ExamDAO"%>
+<%@page import="controller.BXHForward"%>
 <!DOCTYPE html>
 <html>
 
@@ -18,6 +24,7 @@
 		function showLogin()
 		{
 			document.getElementById("loginForm").style.display="block";
+			document.getElementById("name_login").value="";
 
 		}
 		function hideLogin()
@@ -134,8 +141,6 @@
 				var email = $("#Email_code").val();
 				if(email !== '' && pattern.test(email)) 
 				{
-					document.getElementById("forget_password1").style.display="none";
-					document.getElementById("forget_password").style.display="block";
 					document.getElementById("email_error").innerHTML="";
 				} 
 				else 
@@ -144,6 +149,9 @@
 					//document.getElementById("email_error").innerHTML="Không đúng định dạng email";
 				}
 				return false;
+		}
+		function BXHTS() {
+			$.get("/ExaminationOnline/BXHForward?", content => $("col_3 permit").html(content));
 		}
 	</script>
 	<link href="css/bootstrap.css" rel="stylesheet" type="text/css" media="all" />
@@ -218,22 +226,21 @@
     	<!--</div>-->
     </div>
 	<!--//banner -->
-
 	<!--Login-->
 	<div id="loginForm">
 		<div class="loginbox">
 		<img src="images/login2.png" class="avatar" onclick="hideLogin()">
 			<h1>ĐĂNG NHẬP</h1>
-			<form class="signin" action="">
+			<form class="signin" action="LoginForward" method="post">
 				<span class="login-type">
-					<span style="padding-left: 10px;"><input type="radio" name="login" id="lg_ts"> TS</span>
-					<span><input type="radio" name="login" id="lg_gv"> GV</span>
-					<span><input type="radio" name="login" id="lg_ad"> Admin</span>
+					<span style="padding-left: 10px;"><input type="radio" name="rd" value="TS" id="lg_ts"> TS</span>
+					<span><input type="radio" name="rd" id="lg_gv" value="GV"> GV</span>
+					<span><input type="radio" name="rd" id="lg_ad" value="AD"> Admin</span>
 				</span>
-				<input type="text" id="name_login" name="name" placeholder="Tên Đăng Nhập:" class="control" required autofocus>
-				<input type="password" id="pass_login" name="pass" placeholder="Nhập Mật Khẩu:" class="control">
+				<input type="text" id="name_login" name="nameLogin" placeholder="Tên Đăng Nhập:" class="control" required autofocus>
+				<input type="password" id="pass_login" name="passLogin" placeholder="Nhập Mật Khẩu:" class="control">
 				<p style="float: right; margin-bottom: 20px;"><a href="#" onclick="showFormSendCode()">Quên mật khẩu</a></p>
-				<input type="Submit" name="" value="Đăng nhập" style="width: 100%;" onclick="return check()">
+				<input type="Submit" name="" value="Đăng nhập" style="width: 100%;">
 				<p>Nếu bạn chưa có tài khoản, nhấn <a href="#" onclick="mulLogin()">vào đây</a></p>
 			</form>
        </div>
@@ -253,8 +260,8 @@
 			</div>
 			<div class="inf_contact">
 				<i>Phan Thị Quang Thư (16110480) : quangthu1911@gmail.com, 0967539819</i><br>
-				<i>Phan Hữu Hiếu (1611...) : </i><br>
-				<i>Nguyễn Bá Thuận (1611...) : </i><br>
+				<i>Phan Hữu Hiếu (16110329) : 16110329@STUDENT.HCMUTE.EDU.VN , 050946854 </i><br>
+				<i>Nguyễn Bá Thuận (16110584) : 16110584@STUDENT.HCMUTE.EDU.VN, 57643658436</i><br>
 			</div>
 		</div>
 	</div>
@@ -264,16 +271,16 @@
 		<div class="registerbox">
 			<img src="images/login2.png" class="avatar" onclick="hideRegister()">
 			<h1>ĐĂNG KÝ</h1>
-			<form>
+			<form action="RegisterForward" method="post">
 				<span class="login-type">
-					<span style="padding-left: 40%; margin-right: 20px;"><input type="radio" name="login" id="lg_ts"> TS</span>
-					<span ><input type="radio" name="login" id="lg_gv"> GV</span>
+					<span style="padding-left: 40%; margin-right: 20px;"><input type="radio" name="rdlg_ts" id="lg_ts"> TS</span>
+					<span ><input type="radio" name="rdlg_gv" id="lg_gv"> GV</span>
 				</span>
 				<div class="row">
-					<div class="col-6 col-md-2">Họ Tên:</div>
-					<div class="col-6 col-md-4"><input type="text" name="" placeholder="Nhập Họ Và Tên:" class="form_text" id="form_name" required=""></div>
+					<div class="col-6 col-md-2">Tên đăng nhập:</div>
+					<div class="col-6 col-md-4"><input type="text" name="UserLogin" placeholder="Nhập tên đăng nhập:" class="form_text" id="form_name" required=""></div>
 					<div class="col-6 col-md-2">CMND:</div>
-					<div class="col-6 col-md-4"><input type="text" name="" placeholder="Nhập số cmnd:" class="form_text" id="form_cmnd" required=""></div>
+					<div class="col-6 col-md-4"><input type="text" name="Certi" placeholder="Nhập số cmnd:" class="form_text" id="form_cmnd" required=""></div>
 				</div>
 				<div class="row">
 					<div class="col-6 col-md-2"><p> </p></div>
@@ -283,9 +290,9 @@
 				</div>
 				<div class="row">
 					<div class="col-6 col-md-2">SĐT:</div>
-					<div class="col-6 col-md-4"><input type="text" name="" placeholder="Nhập số điện thoại:" class="form_text" id="form_num" required=""></div>
+					<div class="col-6 col-md-4"><input type="text" name="Num" placeholder="Nhập số điện thoại:" class="form_text" id="form_num" required=""></div>
 					<div class="col-6 col-md-2">Nơi công tác:</div>
-					<div class="col-6 col-md-4"><input type="text" name="" placeholder="Nhập nơi công tác:" class="form_text" id="form_work" required=""></div>
+					<div class="col-6 col-md-4"><input type="text" name="Address" placeholder="Nhập nơi công tác:" class="form_text" id="form_work" required=""></div>
 				</div>
 				<div class="row">
 					<div class="col-6 col-md-2"><p> </p></div>
@@ -295,10 +302,10 @@
 				</div>
 				<div class="row">
 					<div class="col-6 col-md-2">Email:</div>
-					<div class="col-6 col-md-4"><input type="text" name="" placeholder="Nhập Email:" class="form_text" 
+					<div class="col-6 col-md-4"><input type="text" name="Email" placeholder="Nhập Email:" class="form_text" 
 						id="form_email" required=""></div>
 					<div class="col-6 col-md-2">Mật khẩu:</div>
-					<div class="col-6 col-md-4"><input type="password" name="" placeholder="Nhập mật khẩu:" class="form_text" 
+					<div class="col-6 col-md-4"><input type="password" name="Password" placeholder="Nhập mật khẩu:" class="form_text" 
 						id="form_pass" required=""></div>
 				</div>
 				<div class="row">
@@ -311,13 +318,15 @@
 					<div class="col-6 col-md-2">Nhập lại:</div>
 					<div class="col-6 col-md-4"><input type="password" name="" placeholder="Nhập lại Mật Khẩu:" class="form_text" 
 						id="form_re_pass" required=""></div>
-					<div class="col-6 col-md-2"><p> </p></div>
-					<div class="col-6 col-md-4"><input type="Submit" name="" value="Đăng ký" class="sbmit_btn" onclick="return ckeckSubmit();" required=""></div>
+					<div class="col-6 col-md-2">Họ và tên:</div>
+					<div class="col-6 col-md-4"><input type="text" name="UserName" placeholder="Nhập họ và tên:" class="form_text" 
+						id="form_HVT" required=""></div>
 				</div>
 				<div class="row">
 					<div class="col-6 col-md-2"><p> </p></div>
 					<div class="col-6 col-md-4"><span class="error_form" id="re_pass_error_message"></span></div>
 				</div>
+				<div><input type="Submit" name="" value="Đăng ký" class="sbmit_btn" onclick="return ckeckSubmit();" required=""></div>
 				<h4>Nếu bạn đã có tài khoản, nhấn <a href="#" onclick="mulRegister()">vào đây</a></h4>
 			</form>
        </div>
@@ -327,39 +336,15 @@
 	<div id="forget_password1">
 		<img src="images/login2.png" class="avatar">
 		<h1>QUÊN MẬT KHẨU</h1>
-		<!--<form class="forget_pass" action="">-->
-	
-				<input type="text" name="pass" placeholder="Nhập email đăng kí:" id="Email_code">
-				<div id="email_error"></div>
-				<button onclick="return check_email()" style="float: right;">Gửi code</button>
-
-		<!--</form>-->
+		<form action="ForgetPassword" method="post">
+		    <input type="text" name="loginUser" placeholder="Nhập tên đăng nhập:" id="NameLogin_code">
+			<input type="text" name="EmailLogin" placeholder="Nhập email đăng kí:" id="Email_code">
+			<div id="email_error"></div>
+			<input type="Submit" name="" value="Gửi code" class="sbmit_btn" onclick="return check_email();" style="float:right; background:#FFB900; font-size:20px;" required="">
+		</form>
     </div>
     <!--form lấy lại mật khẩu-->
-    <div id="forget_password">
-			<img src="images/login2.png" class="avatar">
-			<h1>QUÊN MẬT KHẨU</h1>
-			<form class="forget_pass" action="">
-				<div class="row" >
-					<div class="col-md-4"><p>Mật khẩu mới:</p></div>
-					<div class="col-md-8"><input type="password" name="pass" placeholder="Nhập Mật Khẩu mới:" id="passNew"></div>
-				</div>
-				<div class="row">
-					<div class="col-md-4"><p>Nhập lại mật khẩu:</p></div>
-					<div class="col-md-8"><input type="password" name="pass" placeholder="Nhập lại Mật Khẩu mới:" id="rePassNew"></div>
-				</div>
-				<div class="row">
-					<div class="col-md-4"><p>Nhập mã code:</p></div>
-					<div class="col-md-8"><input type="text" name="name" id="id_code" placeholder="Mã code" class="control" required autofocus></div>
-				</div>
-				<div class="row">
-					<div class="col-md-4"></div>
-					<div class="col-md-8" style="margin-left: 350px;">
-						<button onclick="return checkForgetPassword()">Hoàn Tất</button>
-					</div>
-				</div>
-			</form>
-    </div>
+
 
 	<!-- /inner_content -->
 	<div class="inner_content">
@@ -368,7 +353,7 @@
 				<!--three image-->
 				<div class="row" style="margin-bottom: 100px; margin-top: 100px; color: black;">
 					<div class="column">
-					    <div class="card">
+					    <div class="card" style="background:#E1E1E1;">
 					    	<img src="images/dethi.jpg" alt="Jane" style="width:100%; height: 155px;">
 					        <div class="inf" >
 					        	<h2>Đề thi</h2>
@@ -381,7 +366,7 @@
 					</div>
 
 					<div class="column">
-					    <div class="card">
+					    <div class="card" style="background:#E1E1E1;">
 					    	<img src="images/phanquyen.jpg" alt="Mike" style="width:100%; height: 155px;">
 					      	<div class="inf">
 					        	<h2>Phân quyền</h2>
@@ -394,7 +379,7 @@
 					</div>
 
 					<div class="column">
-					    <div class="card">
+					    <div class="card" style="background:#E1E1E1">
 					    	<img src="images/lambai.png" alt="John" style="width:100%; height: 155px;">
 					      	<div class="inf">
 					        	<h2>Làm bài thi</h2>
@@ -430,37 +415,36 @@
 						<h5 class="widget-title">Tìm kiếm BXH</h5>
 						<div class="widget-content">
 							<span>Môn thi tìm ...</span>
-							<select class="form-control jb_1">
+							<form action="BXHForward" method="post">
+								<select class="form-control jb_1" name="SelectSub">
 								<option value="0">chọn môn</option>
-								<option value="">Mạng máy tính</option>
-								<option value="">Hệ điều hành</option>
-								<option value="">Hệ quản trị csdl</option>
-								<option value="">Lập trình web</option>
-								<option value="">Lập trình di động</option>
-								<option value="">OOP</option>
-							</select>
-							<span>Tên giáo viên</span>
-							<select class="form-control jb_1">
-								<option value="0">Giáo viên</option>
-								<option value="">Nguyễn Thị Hạnh</option>
-								<option value="">Phan Văn Minh Hổ</option>
-								<option value="">Thái Thanh Hà</option>
-								<option value="">Trương Văn Nghĩa</option>
-								<option value="">Trần Thị Hồng</option>
-							</select>
-							<input type="submit" value="Tìm kiếm">
+								<% 	for(Exam c:ExamDAO.DisplayExamStudentBXH())
+								{%>
+								<option value="<%=c.getExamName()%>"><%=c.getExamName()%></option>
+								<%} %>
+								</select>
+								<span>Tên giáo viên</span>
+								<select class="form-control jb_1" name="selectNameTeacher">
+									<option value="0">Giáo viên</option>
+									<% 	for(Exam c:ExamDAO.DisplayExamStudentBXH())
+									{%>
+									<option value="<%=c.getUserLogin()%>"><%=c.getUserLogin()%></option>
+									<%} %>
+								</select>
+								<input type="submit" value="Tìm Kiếm" style="font-weight:bold; color:#FFB900;">
+							</form>
 						</div>
 					</div>
 					<div class="col_3 permit">
-						<h3>Các môn thi</h3>
-						<ul class="list_2">
-							<li><a href="#">Mạng máy tính</a></li>
-							<li><a href="#">Hệ điều hành</a></li>
-							<li><a href="#">Hệ quản trị csdl</a></li>
-							<li><a href="#">Lập trình web</a></li>
-							<li><a href="#">Lập trình di động</a></li>
-							<li><a href="#">OOP</a></li>
-						</ul>
+						<h3>BẢNG XẾP HẠNG</h3>
+						<div class="list-group">
+							<a href="#" class="list-group-item active">${bxh0 }<p style="float:right;">${diem0 }</p></a>
+							<a href="#" class="list-group-item active">${bxh1 }<p style="float:right;">${diem1 }</p></a>
+							<a href="#" class="list-group-item active">${bxh2 }<p style="float:right;">${diem2 }</p></a>
+							<a href="#" class="list-group-item active">${bxh3 }<p style="float:right;">${diem3 }</p></a>
+							<a href="#" class="list-group-item active">${bxh4 }<p style="float:right;">${diem4 }</p></a>
+							<a href="#" class="list-group-item active">${bxh5 }<p style="float:right;">${diem5 }</p></a>
+					   </div>
 					</div>
 				</div>
 				<div class="clearfix"></div>
@@ -527,7 +511,7 @@
 		</div> 
 	</div>
 	<!-- //inner_content -->
-
+	${requestScope.thongbao}
 	<!-- footer -->
 	<div class="footer">
 		<div class="container">
@@ -704,6 +688,7 @@
 		    setTimeout(carousel, 2000); // Change image every 2 seconds
 		}
 	</script>
+	
 </body>
 
 </html>

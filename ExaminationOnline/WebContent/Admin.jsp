@@ -1,3 +1,4 @@
+<%@page import="controller.LoginForward"%>
 <%@ page language="java" contentType="text/html; charset=utf-8"
     pageEncoding="utf-8"%>
 <!DOCTYPE html>
@@ -30,12 +31,12 @@
                     </div>
                     <div class="dropdown">
                         <img src="images/ab.png" width="50px;" height="50px;">
-                        <button class="dropbtn">ADMIN</button>
+                        <button class="dropbtn">${UserLogin}</button>
                         <span class="fa fa-sort-desc" style="color: #fff;"></span>
                         <div class="dropdown-content">
-                            <a href="Admin.jsp"><span class="fa fa-sun-o"></span> Chỉnh sửa thông tin</a>
-                            <a href="ThemThongBao.jsp"><span class="fa fa-comment-o"></span> Xem thông báo</a>
-                            <a href="#"><span class="fa fa-sign-out"></span> Đăng xuất</a>
+                            <a href="Quanlytaikhoan.jsp"><span class="fa fa-sun-o"></span> Quản lý tài khoản</a>
+                            <a href="announce.jsp"><span class="fa fa-comment-o"></span> Xem thông báo</a>
+                            <a href="LogOutForward"><span class="fa fa-sign-out"></span> Đăng xuất</a>
                         </div>
                     </div>
                 </div>
@@ -53,11 +54,10 @@
             <div class="col-md-3 menu_info_left">
                 <div id="menu">
                     <ul>
-                        <li><a href="XemThongTinCaNhan.jsp">THÔNG TIN</a></li>
+                        <li><a href="Admin.jsp">THÔNG TIN</a></li>
                         <li><a href="Quanlytaikhoan.jsp">QUẢN LÝ TÀI KHOẢN</a></li>
-                        <li><a href="#">QUẢN LÝ BÀI THI</a></li>
+                        <li><a href="QuanLyBaiThiAdmin.jsp">QUẢN LÝ BÀI THI</a></li>
                         <li><a href="QLThongBao.jsp">THÔNG BÁO</a></li>
-                        <li><a href="CapQuyen.jsp">PHÂN QUYỀN</a></li>
                     </ul>
                 </div>
             </div>
@@ -73,12 +73,16 @@
                             <div class="col-sm-9 loc_1">
                                 <h1 style="text-align:center;color:burlywood">THÔNG TIN CÁ NHÂN</h1><br>
                                 <div style="color:chocolate;margin-left: 100px">
-                                <label>Tên Đăng Nhập:   MaDuKic</label><br><br>
-                                <label>Họ Tên:   LucaModric</label><br><br>
-                                <label>Số điện thoại:   034754457</label><br><br>
-                                <label>Số CMND:   241003525</label><br><br>
-                                <label>Nơi Công Tác:   Hà Nội</label><br><br>
-                                <label>Email:   MaDuKic@gmail.com</label>  
+                                <% String nameLabel=(String)request.getAttribute("nameLabel"); %>
+                                <label>Tên: <%=LoginForward.UserName%></label><br><br>
+                                <!-- <label>Họ Tên:   LucaModric</label><br><br> -->
+                                <% String phoneLabel=(String)request.getAttribute("phoneLabel"); %>
+                                <label>Số điện thoại:   <%=LoginForward.PhoneNumber%></label><br><br>
+                                <% String cerLabel=(String)request.getAttribute("cerLabel"); %>
+                                <label>Số CMND:   <%=LoginForward.Certi%></label><br><br>
+                                <% String addrLabel=(String)request.getAttribute("addrLabel"); %>
+                                <label>Nơi Công Tác:   <%=LoginForward.Address%></label><br><br>
+                                <!-- <label>Email:   MaDuKic@gmail.com</label>   -->
                                 </div>
                           </div>
                         </div>
@@ -119,7 +123,7 @@
 
     <a href="#home" class="scroll" id="toTop" style="display: block;"> <span id="toTopHover" style="opacity: 1;">
         </span></a>
-
+        <h1>${loi }</h1>
 </body>
 
 </html>

@@ -1,5 +1,12 @@
 <%@ page language="java" contentType="text/html; charset=utf-8"
     pageEncoding="utf-8"%>
+    
+<%@ taglib uri="http://java.sun.com/jsp/jstl/core" prefix="c" %> 
+        <%@page import="BEAN.Question"%>
+<%@page import="DAO.QuestionDAO"%>
+<%@page import="controller.QuestionNextForward"%>
+<%@page import="controller.NextQuestion"%>
+
 <!DOCTYPE html>
 <html>
 
@@ -84,16 +91,12 @@ Smartphone Compatible web template, free webdesigns for Nokia, Samsung, LG, Sony
 			}
 			
 		}
-		function showFinish()
+		function showStop()
 		{
-
-			document.getElementById("form_finish").style.display="block";
-			document.getElementById("do_exam").style.display="none";
-			document.getElementById("time_exam").style.display="none";
-			document.getElementById("time_exam_minutes").style.display="none";
-			document.getElementById("btn").style.display="none";
-			tinhDiem();
-			count=5;
+			alert('Bạn đã hết thời gian làm bài !!!\n\nBấm "Nộp Bài" để xem điểm');
+			document.getElementById("tableResult").style.visibility = "hidden";
+			document.getElementById("timeStop").style.display="none";
+			document.getElementById("do_exam").style.marginTop = '30px';
 		}
 		function showReExamOnline()
 		{
@@ -110,10 +113,41 @@ Smartphone Compatible web template, free webdesigns for Nokia, Samsung, LG, Sony
 	<link href="css/style.css" rel="stylesheet" type="text/css" media="all" />
 
 	<link href="css/font-awesome.css" rel="stylesheet">
-	<!-- //for bootstrap working -->
-	<!--<link href="//fonts.googleapis.com/css?family=Work+Sans:200,300,400,500,600,700" rel="stylesheet">
-	<link href='//fonts.googleapis.com/css?family=Lato:400,100,100italic,300,300italic,400italic,700,900,900italic,700italic'
-	    rel='stylesheet' type='text/css'>-->
+	<style type="text/css">
+		.table_result
+		{
+			height: 300px;
+			background: transparent;
+			margin-top: -300px;
+			margin-left: -30px;
+			border-radius: 30px;
+		}
+		.table_result p
+		{
+			color: #1E1D1D; 
+			font-size: 30px; 
+			text-align: center;
+		}
+		.table_result table
+		{
+			color: #1E1D1D; 
+			font-size: 20px; 
+			margin-top: 30px; 
+			margin-left: 75px;
+		}
+		.inf_exam
+		{
+			background: transparent;
+			margin-top: -650px; 
+			margin-left: 50px;
+		}
+		.ContronlBtn
+		{
+			margin-top: 0px; 
+			margin-left: -25px;
+		}
+		
+	</style>
 </head>
 
 <body>
@@ -134,10 +168,10 @@ Smartphone Compatible web template, free webdesigns for Nokia, Samsung, LG, Sony
 						<button class="dropbtn">Cao Nguyễn Minh</button>
 						<span class="fa fa-sort-desc" style="color: #fff;"></span>
 						<div class="dropdown-content">
-							<a href="ThongTinCN.jsp"><span class="fa fa-sun-o"></span> Chỉnh sửa thông tin</a>
-							<a href="anounce.jsp"><span class="fa fa-comment-o"></span> Xem thông báo</a>
+							<a href="#"><span class="fa fa-sun-o"></span> Chỉnh sửa thông tin</a>
+							<a href="#"><span class="fa fa-comment-o"></span> Xem thông báo</a>
 							<a href="#"><span class="fa fa-sign-out"></span> Đăng xuất</a>
-							<a href="index.jsp"><span class="fa fa-wpforms"></span> Trở về trang chủ</a>
+							<a href="#"><span class="fa fa-wpforms"></span> Trở về trang chủ</a>
 						 </div>
 					</div>
 					<!--/.navbar-collapse-->
@@ -158,16 +192,29 @@ Smartphone Compatible web template, free webdesigns for Nokia, Samsung, LG, Sony
 	<!--<div id="time_exam_minutes"></div>:
 	<div id="time_exam">
 	</div>-->
-	<div class="time_do_exam">
-		<span id="time_exam_minutes"></span><span>:</span>
+	<div class="time_do_exam" id="timeStop">
+	    <img src="images/donghobaithi.png" style="margin:-20px 0 0 20px; width:250px; height:150px;">
+	    <div style="margin-left:80px; margin-top:-100px;">
+	    	<span id="time_exam_minutes">${minutes }</span><span>:</span>
 		<span id="time_exam"></span>
+	    </div>
 	</div>
 	<script type="text/javascript">
+	
 		var couter=60; //đây là số thời gian lấy trong CSDL nè
-		var minutes=5;
+		var minutes=document.getElementById("time_exam_minutes").innerHTML;
+		//var minutes=0;
 		/*hàm đếm thời gian làm bài thi*/
 		function demNguoc()
 		{
+			if(minutes===1)
+			{
+				minutes=0;	
+			}
+			if(minutes<10)
+			{
+				document.getElementById("time_exam_minutes").innerHTML="0"+minutes;
+			}
 			couter--;
 			if(couter!=-1)
 			{
@@ -175,6 +222,10 @@ Smartphone Compatible web template, free webdesigns for Nokia, Samsung, LG, Sony
 				if(couter<10)
 				{
 					document.getElementById("time_exam").innerHTML="0"+couter;
+				}
+				if(minutes<10)
+				{
+					document.getElementById("time_exam_minutes").innerHTML="0"+minutes;
 				}
 				document.getElementById("time_exam_minutes").innerHTML=minutes;
 				setTimeout("demNguoc()",1000);
@@ -185,14 +236,14 @@ Smartphone Compatible web template, free webdesigns for Nokia, Samsung, LG, Sony
 					document.getElementById("time_exam_minutes").innerHTML=minutes;
 					document.getElementById("time_exam").innerHTML=couter;
 				}
-				if(minutes==0)
+				if(minutes==0&&couter==1)
 				{
-					showFinish();
+					showStop();
 				}
 			}
 		}
 		demNguoc();
-		
+	
 	</script>
 
 	<!--form nộp bài khi kết thúc-->
@@ -202,245 +253,97 @@ Smartphone Compatible web template, free webdesigns for Nokia, Samsung, LG, Sony
 			<p>ĐIỂM SỐ CỦA BẠN LÀ: </p>
 			<div id="point" style="color: #fff; font-size: 30px; text-align: center;" ></div>
 			<input type="Submit" name="" value="XEM BÀI" onclick="showReExamOnline()" style="margin-bottom: 10px;">
-			<input type="Submit" name="" value="THOÁT" onclick="location.href='Student.jsp'">
+			<input type="Submit" name="" value="THOÁT" onclick="location.href='Student.html'">
 		</div>
 	</div>
 
 	<!--LÀM BÀI THI TẠI ĐÂY-->
-	<div class="container" id="do_exam">
+	<div class="container" id="do_exam" style="margin-top: -30px; margin-bottom:300px;">
 		<div class="inner_sec_grids_info">
-			<div class="col-md-4 job_info_left">
+			<div class="col-md-4 job_info_left" style="z-index: 1000">
+			<img src="images/sticky.png" width="300px" height="400px">
+			<form action="CheckResultStudentForward"method="post">
 				<div class="table_result">
 					<p>BẢNG ĐÁP ÁN</p>
-					<table border="1" width="200" height="150" bordercolor="white">
-						<tr>
-							<th>STT</th>
-							<th> A </th>
-							<th> B </th>
-							<th> C </th>
-							<th> D </th>
-						</tr>
-
-						<tr>
-							<td> 1 </td>
-							<td> <input type="radio" name="da_cau1" id="1a"> </td>
-							<td> <input type="radio" name="da_cau1" id="1b"> </td>
-							<td> <input type="radio" name="da_cau1" id="1c"> </td>
-							<td> <input type="radio" name="da_cau1" id="1d"> </td>
-						</tr>
-
-						<tr>
-							<td> 2 </td>
-							<td> <input type="radio" name="da_cau2" id="2a"> </td>
-							<td> <input type="radio" name="da_cau2" id="2b"> </td>
-							<td> <input type="radio" name="da_cau2" id="2c"> </td>
-							<td> <input type="radio" name="da_cau2" id="2d"> </td>
-						</tr>
-
-						<tr>
-							<td> 3 </td>
-							<td> <input type="checkbox" name="da_cau3" id="3a"> </td>
-							<td> <input type="checkbox" name="da_cau3" id="3b"> </td>
-							<td> <input type="checkbox" name="da_cau3" id="3c"> </td>
-							<td> <input type="checkbox" name="da_cau3" id="3d"> </td>
-						</tr>
-
-						<tr>
-							<td> 4 </td>
-							<td> <input type="radio" name="da_cau4" id="4a"> </td>
-							<td> <input type="radio" name="da_cau4" id="4b"> </td>
-							<td> <input type="radio" name="da_cau4" id="4c"> </td>
-							<td> <input type="radio" name="da_cau4" id="4d"> </td>
-						</tr>							
-					</table>
+					
+						<table id="tableResult" border="1" width="200" height="150" bordercolor="white">
+							<tr>
+								<th>STT</th>
+								<th> A </th>
+								<th> B </th>
+								<th> C </th>
+								<th> D </th>
+								<th> E </th>
+								<th> F </th>
+							</tr>
+							<%int i=0; for(Question c:QuestionDAO.DisplayQuestion(QuestionNextForward.ExamID))
+							{ i++; if(c.getType()==1){%>
+								<tr>
+									<td> <%=i%> </td>
+									<td> <input type="radio" name="<%=c.getQuestionID()%>" value="A"> </td>
+									<td> <input type="radio" name="<%=c.getQuestionID()%>" value="B"> </td>
+									<td> <input type="radio" name="<%=c.getQuestionID()%>" value="C"> </td>
+									<td> <input type="radio" name="<%=c.getQuestionID()%>" value="D"> </td>
+									<td> <input type="radio" name="<%=c.getQuestionID()%>" value="E"> </td>
+									<td> <input type="radio" name="<%=c.getQuestionID()%>" value="F"> </td>
+								</tr>
+								<%}else{%>
+								<tr>
+									<td> <%=i%> </td>
+									<td> <input type="checkbox" name="<%=c.getQuestionID()+"A"%>" value="A"> </td>
+									<td> <input type="checkbox" name="<%=c.getQuestionID()+"B"%>" value="B"> </td>
+									<td> <input type="checkbox" name="<%=c.getQuestionID()+"C"%>" value="C"> </td>
+									<td> <input type="checkbox" name="<%=c.getQuestionID()+"D"%>" value="D"> </td>
+									<td> <input type="checkbox" name="<%=c.getQuestionID()+"E"%>" value="E"> </td>
+									<td> <input type="checkbox" name="<%=c.getQuestionID()+"F"%>" value="F"> </td>
+								</tr>
+								<%}%>	
+							<%}%>					
+						</table>
 				</div>
+				<div class="ContronlBtn">
+					<a id="preW" href="javascript:preQ()" style="font-size: 25px; margin-right:5px; color: #fff; border:black solid 2px; background: #FFB900;">Trở về</a>
+					<a id="nextW" href="javascript:nextQ(<%=request.getAttribute("stt")==null?"0":request.getAttribute("stt")%>)" style="font-size: 25px; margin-right:5px; color: #fff; border:black solid 2px; background: #FFB900;">Tiếp theo</a>
+					<input type="Submit" name="" value="Nộp bài" style="color:#fff; border:black solid 2px; background: #FFB900; font-size: 30px;">
+				</div>
+			</form>
 			</div>
-			<script language="javascript">
-				var diem=0;
-				var flag=0;
-            	document.getElementById("1c").onclick = function(e){
-	                if (this.checked){
-	                    diem+=2.5;
-	                }
-                };
-                document.getElementById("2b").onclick = function(e){
-	                if (this.checked){
-	                    diem+=2.5;
-	                }
-                };
-                document.getElementById("4d").onclick = function(e){
-	                if (this.checked){
-	                    diem+=2.5;
-	                }
-                };
-                document.getElementById("3b").onclick = function(e){
-	                if (this.checked){
-	                    flag++;
-	                }
-                };
-                document.getElementById("3c").onclick = function(e){
-	                if (this.checked){
-	                    flag++;
-	                }
-                };
-                document.getElementById("3d").onclick = function(e){
-	                if (this.checked){
-	                    flag++;
-	                }
-	                if(flag==3)
-                    {
-                		diem+=2.5;
-                    }
-                };
-                function tinhDiem()
-                {
-                	document.getElementById("point").innerHTML=diem;
-                }
-            </script>
 			<div class="col-md-8 job_info_right">
+				<img src="images//bangcauhoi.png" width="1100px" height="800px" style="margin-top:-90px; margin-left: -180px;">
 				<div class="inf_exam">
 					<div id="Question1">
-						<p>  Câu 1: The IP address 131.107.0.0 is a class B address.<br>
-						   What is the range of binary values for the first octet in this  address class? </p>
+						<p>${ContenQuestion}</p> 
 						 <div class="result">
-						 	<span>A. 10000000 - 11111111 </span><br>
-							<span>B. 00000000 - 10111111</span><br>
-							<span>C. 10000000 - 10111111 </span><br>
-							<span>D. 10000000 - 11011111 </span><br>
+						 	<span>${AnswerA}</span><br>
+							<span>${AnswerB}</span><br>
+							<span>${AnswerC}</span><br>
+							<span>${AnswerD}</span><br>
+							<span>${AnswerE}</span><br>
+							<span>${AnswerF}</span><br>
 						 </div>
-						
 				    </div>
-				    <div id="Question2">
-						<p>  Câu 2: What is the network address for a host with<br>
-						   the IP address 123.200.8.68/28? </p>
-						<div class="result">
-							<span>A. 123.200.8.0 </span><br>
-							<span>B. 123.200.8.32 </span><br>
-							<span>C. 123.200.8.64 </span><br>
-							<span>D. 123.200.8.65 </span><br>	
-						</div>
-						
-				    </div>
-				    <div id="Question3">
-						<p>  Câu 3: Which of the following addresses can be assigned to a host<br>
-						    when using a subnet mask of 255.255.254.0? (Select three)</p>
-						<div class="result">
-							<span>A. 113.10.4.0</span><br>
-							<span>B. 186.54.3.0</span><br>
-							<span>C. 152.135.7.0</span><br>
-							<span>D. 26.35.2.255</span><br>
-						</div>
-						
-					</div>
-					<div id="Question4">
-						<p>  Câu 4: If a host on a network has the address 172.16.45.14/30,<br>
-						   what is the address of the subnetwork to which this host belongs? </p>
-						<div class="result">
-							<span>A. 172.16.45.0</span><br>
-							<span>B. 172.16.45.4</span><br>
-							<span>C. 172.16.45.8</span><br>
-							<span>D. 172.16.45.12</span><br>
-						</div>
-						
-					</div>
 				</div>
 			</div>
 		</div>
 	</div>
 	
 	<!--cho nó hiển thị các button để bấm-->
-	<div class="container" id="btn" style="margin-top: 40px; margin-bottom: 40px;">
+	<!--<div class="container" id="btn" style="margin-top: 40px; margin-bottom: 40px;">
 		<div class="inner_sec_grids_info_w3ls">
 			<div class="col-md-4 job_info_left">
 				<p> </p>
 			</div>
 			<div class="col-md-8 job_info_right">
 				<div class="btn_exam">
-					<input type="submit" name="btn_pre" onclick="showQuestionPre()" value="Trở về" />
-					<input type="submit" name="btn_next" onclick="showQuestionNext()" value="Tiếp theo" />
-					<input type="submit" name="btn_finish" onclick="showFinish()" value="Nộp bài" />
+					<a href="QuestionPreForward" style="font-size: 25px; margin-right:20px; color: #fff; border:black solid 2px; background: #FFB900;">Trở về</a>
+					<a href="QuestionNextForward?stt=<%=request.getAttribute("stt")==null?"0":request.getAttribute("stt")%>" style="font-size: 25px; margin-right:20px; color: #fff; border:black solid 2px; background: #FFB900;">Tiếp theo</a>
+					
 				</div>
 			</div>
 		</div>
-	</div>
-	<!--form xem bài thi đã làm-->
-	<div class="re_exam" id="re_exam_student">
-		
-		<div class="row">
-			<div class="col-md-8">
-				<div id="cau1">
-						<p>  Câu 1: The IP address 131.107.0.0 is a class B address.<br>
-						   What is the range of binary values for the first octet in this  address class? </p>
-						 <div class="result">
-						 	<input type="radio" name="da_cau1" id="1a"><span>A. 10000000 - 11111111 </span><br>
-							 <input type="radio" name="da_cau1" id="1b"><span>B. 00000000 - 10111111</span><br>
-							 <input type="radio" name="da_cau1" id="1c"><span>C. 10000000 - 10111111 </span><br>
-							 <input type="radio" name="da_cau1" id="1d"><span>D. 10000000 - 11011111 </span><br>
-						 </div>
-						
-				    </div>
-			</div>
-			<div class="col-md-4">
-				<div class="show_log">Bạn làm sai</div>
-			</div>
-		</div>
-		<div class="row">
-			<div class="col-md-8">
-				<div id="cau1">
-						<p>  Câu 2: What is the network address for a host with<br>
-						   the IP address 123.200.8.68/28? </p>
-						<div class="result">
-							<input type="radio" name="da_cau1" id="2a"><span>A. 123.200.8.0 </span><br>
-							<input type="radio" name="da_cau1" id="2b"><span>B. 123.200.8.32 </span><br>
-							<input type="radio" name="da_cau1" id="2c"><span>C. 123.200.8.64 </span><br>
-							<input type="radio" name="da_cau1" id="2d"><span>D. 123.200.8.65 </span><br>	
-						</div>
-						
-				    </div>
-			</div>
-			<div class="col-md-4">
-				<div class="show_log">Bạn làm đúng</div>
-			</div>
-		</div>
-		<div class="row">
-			<div class="col-md-8">
-				<div id="cau1">
-						<p>  Câu 3: Which of the following addresses can be assigned to a host<br>
-						    when using a subnet mask of 255.255.254.0? (Select three)</p>
-						<div class="result">
-							<input type="checkbox" name="da_cau3" id="3a"><span>A. 113.10.4.0</span><br>
-							<input type="checkbox" name="da_cau3" id="3b"><span>B. 186.54.3.0</span><br>
-							<input type="checkbox" name="da_cau3" id="3c"><span>C. 152.135.7.0</span><br>
-							<input type="checkbox" name="da_cau3" id="3d"><span>D. 26.35.2.255</span><br>
-						</div>
-						
-					</div>
-			</div>
-			<div class="col-md-4">
-				<div class="show_log">Bạn làm sai</div>
-			</div>
-		</div>
-		<div class="row">
-			<div class="col-md-8">
-				<div id="cau1">
-						<p>  Câu 4: If a host on a network has the address 172.16.45.14/30,<br>
-						   what is the address of the subnetwork to which this host belongs? </p>
-						<div class="result">
-							<input type="radio" name="da_cau1" id="4a"><span>A. 172.16.45.0</span><br>
-							<input type="radio" name="da_cau1" id="4b"><span>B. 172.16.45.4</span><br>
-							<input type="radio" name="da_cau1" id="4c"><span>C. 172.16.45.8</span><br>
-							<input type="radio" name="da_cau1" id="4d"><span>D. 172.16.45.12</span><br>
-						</div>
-						
-					</div>
-			</div>
-			<div class="col-md-4">
-				<div class="show_log">Bạn làm đúng</div>
-			</div>
-		</div>
-		
-	</div>
-
+	</div>-->
+	<span>${thongbao}</span>
+	<h1>${requestScope.loi}</h1>
 	<!--footer-->
 	<div class="footer">
 		<div class="container">
@@ -450,7 +353,7 @@ Smartphone Compatible web template, free webdesigns for Nokia, Samsung, LG, Sony
 						<a href="index.html">
 							<h2><span class="fa fa-signal" aria-hidden="true"></span> THT <label>Examination online</label></h2>
 						</a>
-						<p>© 2017 Soft. All rights reserved | Design by <a href="#">Group 11</a></p>
+						<p>© 2017 Soft. All rights reserved | Design by <a href="http://w3layouts.com">Group 11</a></p>
 					</div>
 				</div>
 				<div class="col-md-3 footer_bottom_grid">
@@ -469,7 +372,6 @@ Smartphone Compatible web template, free webdesigns for Nokia, Samsung, LG, Sony
 		</div>
 	</div>
 	<!-- //footer -->
-
 	<!--<a href="#home" class="scroll" id="toTop" style="display: block;"> <span id="toTopHover" style="opacity: 1;"> </span></a>
 	<!-- js -->
 	<script type="text/javascript" src="js/jquery-2.1.4.min.js"></script>
@@ -488,6 +390,24 @@ Smartphone Compatible web template, free webdesigns for Nokia, Samsung, LG, Sony
 			else
 				document.getElementById("password2").setCustomValidity('');
 			//empty string means no validation error
+			
+		}
+		
+		function nextQ(stt) {
+			$.get("/ExaminationOnline/NextQuestion?ExamID=<%=QuestionNextForward.ExamID%>&stt=" +stt, content => $(".inf_exam").html(content));
+			$("#nextW").attr("href", "javascript:nextQ(" + (parseInt(stt) + 1) +")");
+				
+		}
+		function preQ() {
+			$.get("/ExaminationOnline/PreQuestion", content => { $(".inf_exam").html(content); console.log(content); });
+			$("#preW").attr("href", "javascript:preQ()");
+			let href = $("#nextW").attr("href");
+			let start = href.indexOf("(") + 1;
+			let end = href.lastIndexOf(")");
+			let stt = href.substring(start, end);
+			let tt = parseInt(stt);
+			
+			$("#nextW").attr("href", "javascript:nextQ(" + (tt - 1) +")");
 		}
 	</script>
 	<!-- //password-script -->

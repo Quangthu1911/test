@@ -167,12 +167,11 @@
 					</div>
 					<div class="dropdown">
 						<img src="images/ab.png" width="50px;" height="50px;">
-						<button class="dropbtn">Cao Nguyễn Minh</button>
+						<button class="dropbtn">${UserLogin}</button>
 						<span class="fa fa-sort-desc" style="color: #fff;"></span>
 						<div class="dropdown-content">
-							<a href="GV.jsp"><span class="fa fa-sun-o"></span> Chỉnh sửa thông tin</a>
 							<a href="announce.jsp"><span class="fa fa-comment-o"></span> Xem thông báo</a>
-							<a href="#"><span class="fa fa-sign-out"></span> Đăng xuất</a>
+							<a href="LogOutForward"><span class="fa fa-sign-out"></span> Đăng xuất</a>
 							<a href="index.jsp"><span class="fa  fa-arrow-left"></span>Trở về trang chủ</a>
 						 </div>
 					</div>

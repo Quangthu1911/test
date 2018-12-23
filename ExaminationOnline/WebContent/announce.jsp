@@ -1,5 +1,8 @@
 <%@ page language="java" contentType="text/html; charset=utf-8"
     pageEncoding="utf-8"%>
+    <%@ taglib uri="http://java.sun.com/jsp/jstl/core" prefix="c" %> 
+        <%@page import="BEAN.announce"%>
+<%@page import="DAO.AnnounceDAO"%>
 <!DOCTYPE html>
 <html>
 
@@ -34,7 +37,55 @@ Smartphone Compatible web template, free webdesigns for Nokia, Samsung, LG, Sony
 			
 		    location.href='index.html';
 		}
+		function myFunction() {
+		    var input, filter, ul, li, a, i, txtValue;
+		    input = document.getElementById("myInput");
+		    filter = input.value.toUpperCase();
+		    ul = document.getElementById("myUL");
+		    li = ul.getElementsByTagName("li");
+		    for (i = 0; i < li.length; i++) {
+		        a = li[i].getElementsByTagName("a")[0];
+		        txtValue = a.textContent || a.innerText;
+		        if (txtValue.toUpperCase().indexOf(filter) > -1) {
+		            li[i].style.display = "";
+		        } else {
+		            li[i].style.display = "none";
+		        }
+		    }
 	</script>
+	<style>
+	#myInput {
+		  background-image: url('/css/searchicon.png');
+		  background-position: 10px 12px;
+		  background-repeat: no-repeat;
+		  width: 100%;
+		  font-size: 16px;
+		  padding: 12px 20px 12px 40px;
+		  border: 1px solid #ddd;
+		  margin-bottom: 12px;
+		}
+		
+		#myUL {
+		  list-style-type: none;
+		  padding: 0;
+		  margin: 0;
+		}
+		
+		#myUL li a {
+		  border: 1px solid #ddd;
+		  margin-top: -1px; /* Prevent double borders */
+		  background-color: #f6f6f6;
+		  padding: 12px;
+		  text-decoration: none;
+		  font-size: 18px;
+		  color: black;
+		  display: block
+		}
+		
+		#myUL li a:hover:not(.header) {
+		  background-color: #eee;
+		}
+	</style>
 	<!--//tags -->
 	<link href="css/bootstrap.css" rel="stylesheet" type="text/css" media="all" />
 	<link href="css/style.css" rel="stylesheet" type="text/css" media="all" />
@@ -56,15 +107,9 @@ Smartphone Compatible web template, free webdesigns for Nokia, Samsung, LG, Sony
 						<a class="navbar-brand" href="index.jsp">
 							<h1><span class="fa fa-signal" aria-hidden="true"></span> THT <label>Examintion Online</label></h1>
 						</a>
-					</div>
-					<div class="dropdown">
-						<img src="images/ab.png" width="50px;" height="50px;">
-						<button class="dropbtn">Cao Nguyễn Minh</button>
-						<span class="fa fa-sort-desc" style="color: #fff;"></span>
 						<div class="dropdown-content">
-							<a href="ThongTinCN.jsp"><span class="fa fa-sun-o"></span> Chỉnh sửa thông tin</a>
-							<a href="announce.jsp"><span class="fa fa-comment-o"></span> Xem thông báo</a>
-							<a href="#" onclick="showQuestionLogout()"><span class="fa fa-sign-out"></span> Đăng xuất</a>
+							<a href="index.jsp"><span class="fa fa-wpforms"></span> Trở về trang chủ</a>
+							<a href="LogOutForward"><span class="fa fa-sign-out"></span> Đăng xuất</a>
 						 </div>
 					</div>
 					<!--/.navbar-->
@@ -97,71 +142,29 @@ Smartphone Compatible web template, free webdesigns for Nokia, Samsung, LG, Sony
 		<div class="container">
 			<div class="inf_anoun">
 				<div class="col-md-8 job_info_left">
+					<%for(announce c:AnnounceDAO.DisplayAnnounce())
+						{%>
 					<div class="tab_grid_prof">
+					
 						<div class="col-sm-3 loc_1">
-							<a href="#"><img src="images/pf1.jpg" alt=""></a>
+							<a href="#"><img src="images/thongbao.jpg" width="130px" height="200px" alt=""></a>
 						</div>
 						<div class="col-sm-9">
 							<div class="location_box1">
-								<h6>Chương Trình Khuyến Mãi</h6>
-								<span class="inf1">Chia Sẻ Nhiều - Qùa Hấp Dẫn</span>
+								<h6><%=c.getTitleMainNews() %></h6>
+								<span class="inf1"><%=c.getTitleNews() %></span>
 								<div class="inf">
 									<ul>
 
-										<li><span>Nào cùng SHARE</span></li>
-										<li><span>Facebook</span>: Một chiếc mũ xinh</li>
-										<li><span>Zalo</span>: Áo thun cực cute</li>
-										<li><span>Intergam</span>: Móc chìa khóa </li>
-										<li><span>Mạng xã hội</span>: Quạt cầm tay dễ thương</li>
+										<li><span><%=c.getContentNews() %></span></li>
 									</ul>
 								</div>
 							</div>
 						</div>
+						<hr  width="30%" size="5px" align="center" color="red" /> 
 						<div class="clearfix"> </div>
 					</div>
-					<div class="tab_grid_prof">
-						<div class="col-sm-3 loc_1">
-							<a href="#"><img src="images/pf2.jpg" alt=""></a>
-						</div>
-						<div class="col-sm-9">
-							<div class="location_box1">
-								<h6>Phiên Bản Hoạt Động Mới</h6>
-								<span class="inf1">Phiên bản app thi trắc nghiệm online sắp ra mắt</span>
-								<div class="inf">
-									<ul>
-
-										<li><span>Hoạt Động</span>: Android, IOS</li>
-										<li><span>Thời Gian Ra Mắt</span>: 12/12/2018</li>
-										<li><span>Thời Gian Thử</span>: 3 Tháng</li>
-										<li><span>Lưu Lượng</span>: Nhỏ</li>
-									</ul>
-								</div>
-							</div>
-						</div>
-						<div class="clearfix"> </div>
-					</div>
-					<div class="tab_grid_prof">
-						<div class="col-sm-3 loc_1">
-							<a href="#"><img src="images/pf3.jpg" alt=""></a>
-						</div>
-						<div class="col-sm-9">
-							<div class="location_box1">
-								<h6>Offline</h6>
-								<span class="inf1">Tổ chức offline giữa thí sinh và giáo viên</span>
-								<div class="inf">
-									<ul>
-
-										<li><span>Ngày bắt đầu</span>: 20/11/2018</li>
-										<li><span>Giờ bắt đầu</span>: 7h30 am</li>
-										<li><span>Giờ kết thúc</span>: 11h30 am</li>
-										<li><span>Người tham gia</span>: tất cả các thí sinh và giáo viên</li>
-										<li><span>Mục đích</span>: Gặp gỡ, giao lưu giữa thí sinh và giáo viên</li>
-									</ul>
-								</div>
-							</div>
-						</div>
-						<div class="clearfix"> </div>
-					</div>
+					<%} %>
 				</div>
 				<div class="col-md-4 job_info_right">
 
@@ -169,19 +172,18 @@ Smartphone Compatible web template, free webdesigns for Nokia, Samsung, LG, Sony
 						<h5 class="widget-title">Tìm Kiếm</h5>
 						<div class="widget-content">
 							<span>Nhập Từ Khóa</span>
-							<input type="text" class="form-control jb_2" placeholder="Từ khóa thông báo">
+							<input type="text" id="myInput" onkeyup="myFunction()" placeholder="Search for names.." title="Type in a name">
+							<!--<input type="text" class="form-control jb_2" placeholder="Từ khóa thông báo">-->
 							<input type="submit" value="tìm kiếm">
 						</div>
 					</div>
 					<div class="col_3 permit">
 						<h3>Các thông báo</h3>
-						<ul class="list_2">
-							<li><a href="#">Chia sẻ nhiều - Qùa hấp dẫn</a></li>
-							<li><a href="#">Phần mềm trắc nghiệm online</a></li>
-							<li><a href="#">Hệ quản trị csdl</a></li>
-							<li><a href="#">Lập trình web</a></li>
-							<li><a href="#">Lập trình di động</a></li>
-							<li><a href="#">OOP</a></li>
+						<ul id="myUL">
+						 <%for(announce c:AnnounceDAO.DisplayAnnounce())
+						    {%>
+							  <li><a href="#"><%=c.getTitleMainNews() %></a></li>
+							 <%} %>
 						</ul>
 					</div>
 				</div>
